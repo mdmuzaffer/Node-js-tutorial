@@ -1,1 +1,124 @@
 
+
+var mysqlConnection = mysql.createConnection({  
+  host: "localhost",  
+  user: "root",  
+  password: "",
+  database: "employeedb"
+});  
+mysqlConnection.connect((err)=>{  
+  if (!err)  
+  console.log("Your database connected!"); 
+  else
+ console.log("database connection failed \n Error :" + JSON.stringify(err, undefined, 2));
+});  
+
+app.listen(3000,()=>console.log('Express server is running at port no :3000'));
+
+// Featch all users
+app.get('/employee', function (req, res) {
+	mysqlConnection.query("SELECT * FROM employee", function (err, result) {  
+		if (err){ 
+		throw err; 
+		}else{
+		console.log(result); 
+		res.send(result);
+		} 
+	});
+}); 
+
+// fetch single user details
+app.get('/employee/:id', function (req, res) {
+	mysqlConnection.query("SELECT * FROM employee where EmpID =?",[req.params.id], function (err, result) {  
+		if (err){ 
+		throw err; 
+		}else{
+		console.log(result); 
+		res.send(result);
+		} 
+	});
+});
+
+//Delete single user details
+app.delete('/employee/delete/:id', function (req, res) {
+	mysqlConnection.query("DELETE FROM employee where EmpID =?",[req.params.id], function (err, result) {  
+		if (err){ 
+		throw err; 
+		}else{
+		console.log('Deleted successfully'); 
+		res.send('Deleted successfully');
+		} 
+	});
+});
+
+app.get('/contact', function (req, res) {
+		mysqlConnection.query("SELECT * FROM employee", function (err, result) {
+			//res.send(result);
+			res.render('contact',{result:result});
+		});
+	
+});
+
+// POST /contact gets urlencoded bodies
+app.post('/contact', function (req, res) {
+	console.log(req.body);
+		var name = req.body.name;
+		var empcode = req.body.empcode;
+		var salary = req.body.salary;
+		//console.log(sqlData); return;
+		var sqlData = "INSERT INTO employee (Name, EmpCode, Salary) VALUES ('"+ name +"', '"+ empcode +"', '"+ salary +"')"; 
+		mysqlConnection.query(sqlData, function (err, result) {
+		if (err) throw err;  
+		
+		//res.send('Your record inserted with the name :'+ req.body.name);
+		
+		var message = "Your record inserted with the name :"+ req.body.name;
+		res.render('contact',{message:message});
+		});  
+});
+
+//delete employee
+app.get('/delete/:id', function (req, res) {
+	mysqlConnection.query("DELETE FROM employee where EmpID =?",[req.params.id], function (err, result) {  
+		if (err){ 
+		throw err; 
+		}else{
+		console.log('Deleted successfully'); 
+		res.send('Deleted successfully');
+		} 
+	});
+});
+
+// update an employee view
+app.get('/update/:id', function (req, res) {
+	mysqlConnection.query("SELECT * FROM employee where EmpID =?",[req.params.id], function (err, result) {  
+		if (err){ 
+		throw err; 
+		}else{
+		console.log(result); 
+		res.render('update',{result:result});
+		//res.send(result);
+		} 
+	});
+});
+
+// update query
+
+// POST /contact gets urlencoded bodies
+app.post('/update', function (req, res) {
+	var name = req.body.name;
+	var id = req.body.id;
+	var empcode = req.body.empcode;
+	var salary = req.body.salary;
+	//console.log(sqlData); return;
+
+	var sqlUpdate = "UPDATE `employee` SET `Name` = '"+ name +"', `EmpCode` = '"+ empcode +"', `Salary` = '"+ salary +"' WHERE `employee`.`EmpID` = '"+ id +"'";
+	mysqlConnection.query(sqlUpdate, function (err, result) {
+	if (err) throw err;  
+	//res.send('Your record inserted with the name :'+ req.body.name);
+	var message = "Your record update with the name :"+ req.body.name;
+	//res.render('contact');
+	res.send(message);
+	}); 
+	
+});

@@ -1,1 +1,89 @@
 
+1. npm init // run command 
+
+Also hit enter ,enter for project details like :-
+"version": "1.0.0",
+"description": "",
+"main": "index.js",
+"author": "",
+"license": "ISC"
+
+ npm install --save express@4.16.3 mysql@2.15.0 body-parser@1.18.2
+ Or install one by one like-
+ command :- npm install mysql
+ https://www.npmjs.com/package/mysql
+ 
+ =======================
+ 
+ //var mysql = require('mysql'); 
+const mysql = require('mysql');
+var mysqlConnection = mysql.createConnection({  
+  host: "localhost", 
+  user: "root",  
+  password: "",
+  database: "employeedb"
+});  
+mysqlConnection.connect(function(err){  
+  if (!err)  
+  console.log("Your database connected!"); 
+  else
+	console.log("database connection failed \n Error :" + JSON.stringify(err, undefined, 2));
+});  
+
+=======================
+
+mysqlConnection.connect((err)=>{  
+  if (!err)  
+  //console.log("Your database connected!"); 
+	mysqlConnection.query("SELECT * FROM employee", function (err, result) {  
+		if (err) throw err;  
+		console.log(result);  
+	}); 
+  else
+ console.log("database connection failed \n Error :" + JSON.stringify(err, undefined, 2));
+});
+
+
+I have installed nodemon //auto load or run the file code
+https://www.npmjs.com/package/nodemon
+==========================================
+
+For view install EJS package
+npm install ejs
+Now in root folder create views folder here create view page like contact.ejs and load in the index.js file 
+
+app.get('/contact', function (req, res) {
+	res.render('contact');
+});
+
+load file -res.render('contact');
+send data in view fiel -res.send(message);
+
+pass variable
+var message = "Welcome to Register form";
+res.render('register',{message:message});
+==================
+
+<p><%= result %></p><br>
+
+
+<ul class="timeline">
+    <% for (var i = 0; i < result.length; i++) { %>
+    <li class="timeline-yellow">
+        <div class="timeline-time">
+            <span class="date" style="text-align:left">
+			<%= result[i].EmpID %> &nbsp;&nbsp;&nbsp;
+			<%= result[i].Name %> &nbsp;&nbsp;&nbsp;
+			<%= result[i].EmpCode %> &nbsp;&nbsp;&nbsp;
+			<%= result[i].Salary %> &nbsp;&nbsp;&nbsp;
+            </span>
+        </div>
+    </li>
+    <% } %>
+</ul>
+
+
+
+
+
+

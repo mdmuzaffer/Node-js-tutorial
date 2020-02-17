@@ -64,6 +64,10 @@ var message = "Welcome to Register form";
 res.render('register',{message:message});
 ==================
 
+
+How to make localhost url server 
+app.listen(3000,()=>console.log('Express server is running at port no :3000'));
+------------------------------------------
 <p><%= result %></p><br>
 
 
